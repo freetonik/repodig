@@ -1,0 +1,11 @@
+%p= @repo.url
+
+%p= @repo.name
+
+%p
+  Stars
+  = @repo.stargazers_count
+
+%p
+  Average closage period
+  = Time.at(@repo.forks_count).utc.strftime("%H:%M:%S")

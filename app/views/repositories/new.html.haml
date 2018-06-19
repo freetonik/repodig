@@ -1,0 +1,8 @@
+= form_with scope: :repository, url: repositories_path, local: true do |form|
+  %p
+    = form.label :url
+    %br/
+    = form.text_field :url
+
+  %p
+    = form.submit
