@@ -1,0 +1,10 @@
+= form_with scope: :repository, url: repositories_path, local: true do |form|
+  .text-center
+    .input-group.input-group-lg.w-100
+      .input-group-prepend
+        %span#inputGroup-sizing-lg.input-group-text https://github.com/
+
+      = form.text_field :address, class: 'form-control'
+
+    .mt-3
+      = form.button :Analyze, class: 'btn btn-lg btn-dark w-50'

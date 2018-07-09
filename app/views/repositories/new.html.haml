@@ -1,8 +1,3 @@
-= form_with scope: :repository, url: repositories_path, local: true do |form|
-  %p
-    = form.label :url
-    %br/
-    = form.text_field :url
-
-  %p
-    = form.submit
+.row.justify-content-center
+  .col-12.col-lg-7.py-5
+    = render "repositories/new"
