@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_09_154835) do
+ActiveRecord::Schema.define(version: 2018_07_10_142413) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "repositories", force: :cascade do |t|
     t.string "address"
@@ -59,6 +62,8 @@ ActiveRecord::Schema.define(version: 2018_07_09_154835) do
     t.integer "median_open_prs_age"
     t.integer "min_open_prs_age"
     t.integer "max_open_prs_age"
+    t.integer "contributors"
+    t.integer "contributors_incl_anon"
   end
 
 end

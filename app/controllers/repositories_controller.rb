@@ -10,12 +10,12 @@ class RepositoriesController < ApplicationController
     @repo = Repository.find_or_create_by(repository_params)
     @repo.save
 
-    if @repo.analyzed
-      if (Time.now - @repo.updated_at) > 24.seconds
-        AnalyzeWorker.perform_async(@repo.id)
+    if !@repo.analyzed
+      if (Time.now - @repo.updated_at) > 7.days
+        run_all_workers @repo.id
       end
     else
-      AnalyzeWorker.perform_async(@repo.id)
+      run_all_workers @repo.id
     end
 
     redirect_to @repo
@@ -23,15 +23,27 @@ class RepositoriesController < ApplicationController
 
   def report
     @repo = Repository.find(params[:id])
-    if (Time.now - @repo.updated_at) > 24.seconds
+    if (Time.now - @repo.updated_at) > 24.hours
       @repo.update_attribute(:report_in_progress, true)
-      AnalyzeWorker.perform_async(@repo.id)
+      run_all_workers @repo.id
     end
     redirect_to @repo
   end
 
+  def run_all_workers(repo_id)
+    @repo = Repository.find(repo_id)
+    @repo.update_attribute :report_in_progress, true
+
+    AnalyzeBasicWorker.perform_async repo_id
+    AnalyzeOpenIssuesWorker.perform_async repo_id
+    AnalyzeClosedIssuesWorker.perform_async repo_id
+    AnalyzeOpenPrsWorker.perform_async repo_id
+    AnalyzeClosedPrsWorker.perform_async repo_id
+  end
+
   private
-    def repository_params
-      params.require(:repository).permit(:address)
-    end
+
+  def repository_params
+    params.require(:repository).permit(:address)
+  end
 end
