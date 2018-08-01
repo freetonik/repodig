@@ -8,7 +8,6 @@ class FinalizeReportWorker
     # The approach is fine, but the implicit conditions are bad.
     # Checking if workers actually finished would be better.
     # Or maybe each worker's status should correspond to a field in DB
-
     if repo.owner_url &&
        repo.max_number_of_comments_per_issue &&
        repo.max_pr_closing_time &&
