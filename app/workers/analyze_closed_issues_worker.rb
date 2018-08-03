@@ -8,7 +8,6 @@ class AnalyzeClosedIssuesWorker
 
     # CLOSED ISSUES
     @closed_issues = client.list_issues repo.address, state: 'closed', per_page: 100
-    repo.update_attribute :closed_issues_count, @closed_issues.count
 
     @closed_issues_closing_periods = @closed_issues.map { |x| x.closed_at - x.created_at }
     @closed_issues_closing_periods.extend(DescriptiveStatistics)
@@ -30,6 +29,8 @@ class AnalyzeClosedIssuesWorker
       repo.update_attribute :average_number_of_comments_per_issue, 0
       repo.update_attribute :max_number_of_comments_per_issue, 0
     end
+
+    repo.update_attribute :closed_issues_count, @closed_issues.count
 
     FinalizeReportWorker.perform_async repo_id
 
