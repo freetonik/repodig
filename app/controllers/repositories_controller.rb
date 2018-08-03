@@ -18,8 +18,8 @@ class RepositoriesController < ApplicationController
   end
 
   def report
+    @repo = Repository.find(params[:id])
     if (Time.now - @repo.updated_at) > 24.hours
-      @repo = Repository.find(params[:id])
       run_all_workers @repo.id
     end
     redirect_to @repo
