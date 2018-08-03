@@ -9,7 +9,6 @@ class AnalyzeClosedPrsWorker
     # =====================
     # CLOSED PULL REQUESTS
     @closed_prs = client.pull_requests repo.address, state: 'closed', per_page: 100
-    repo.update_attribute :closed_pr_count, @closed_prs.count
 
     @closed_prs_closing_periods = @closed_prs.map { |x| x.closed_at - x.created_at }
     @closed_prs_closing_periods.extend(DescriptiveStatistics)
@@ -19,6 +18,7 @@ class AnalyzeClosedPrsWorker
     repo.update_attribute :min_pr_closing_time, @closed_prs_closing_periods.min
     repo.update_attribute :max_pr_closing_time, @closed_prs_closing_periods.max
 
+    repo.update_attribute :closed_pr_count, @closed_prs.count
     FinalizeReportWorker.perform_async repo_id
   end
 end

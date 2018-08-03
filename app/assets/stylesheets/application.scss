@@ -17,6 +17,9 @@
 @import "bootstrap";
 @import "theme";
 
+body {
+  height: 100vh;
+}
 
 .small-caps {
    font-variant: small-caps;
@@ -31,5 +34,8 @@ table.r-table {
 
 .r-unstyled-link {
   color: inherit;
+}
 
+.r-lead {
+  font-size: 1.25rem;
 }

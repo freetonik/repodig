@@ -7,9 +7,19 @@
     = csp_meta_tag
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
-    %script{:crossorigin => "anonymous", :defer => "defer", :integrity => "sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9", :src => "https://use.fontawesome.com/releases/v5.1.0/js/all.js"}
     %link{:href => "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALQSURBVGhD7dlLqE1RHMfx45FHiCiZyUAZGBh4DxAimXhFKCRJFC4GokxEMpAB5f1IjCQjZaAYMJAUkRgYeERGyitv35/OqtXqv89Z9zp7nbW7fvVJd5997P/vOs5ee+9axpmHZ7iHCdpQ1TzE77r3mIrKZQh+whVxZaagUtHHyi/hl5mMymQfrCKiMpNQidyEVcJRmYnIOn3wCW7o51iBr942VybrbzP9pv2Bz0NZiEqV2QZ/2ENQRuAK/NdEZUYiqwzGffiD/sLj+p/+dt8OZBOVuA1r0GZmIot0pcRLnMV8ZJHYEvomu44OjEVWiSlxGXPQD1kmpsQZ9ES26TYlTuN/ibITW6IHsk23KXEKSUtsxCss/vtT82RZYjPcwu0HlqJRYkqcRNtKOCqzDFayLLEFRUtolVkOP1mW2IpG1wHyDaOgxJQ4geQlrEF8KrkWSpYlwsvNIjuhxJQ4jixL6KJG0V2PG7D2cZKX2A5rkNBduOuDc7D2cZKXWAdrkJB/12IDrH2cY0haYgzCe0ZFVkPR/adG70leQtHlpDVM6A40XH/o2YW1jxyE9pPxSBLd+PoOa6DQDCj7Yb2uGwSroPSCTnz6u5doQ9nZBGuo0CMow/ER4etP4O5uDMI1uNeSlLkAf6AiR6Csh79dJ0V9Mw2Eov9vKu3vI6WXsQ5q2Q1lL9y2p5gOl5X4AP99PpVZhFLyDtZBQ1ehDMUuaBmvk6EyDJdgvS/0AKUk9mtX1sBPb+hc8hbW/qHP0M22UvIF1kGLaDmiR2M6T7yub4uhEnNRWl7AOnArlfov4aJ1k3XwVtG5pfQSij4i1gCtkKyEorWTNcS/UonZSBatZJtdznZW8hIut2AN1BUqMQttic4P1lCdpRJtfZ6ndVKjZXkMPXkdh7ZHl656KH8Rb2ANG9J9LX0stcbqiywzGgug6/gDOIrD2AMt/adhADJIrfYH7QjVC2gmmpwAAAAASUVORK5CYII=", :rel => "shortcut icon"}/
 
-  %body
-    .container-fluid.px-0
+  %body.d-flex.flex-column.justify-content-between
+    .container-fluid.px-0.flex-fill
       = yield
+
+    %footer.text-center.py-4
+
+      = succeed ',' do
+        = link_to 'Rakhim D.', 'https://rakhim.org'
+      2018
+      .mt-2
+        %a.twitter-follow-button{"data-show-count" => "false", :href => "https://twitter.com/freetonik?ref_src=twsrc%5Etfw"} Follow @freetonik
+        %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
+
+      .h2 🇫🇮

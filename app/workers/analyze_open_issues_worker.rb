@@ -10,7 +10,6 @@ class AnalyzeOpenIssuesWorker
     # OPEN ISSUES
     @open_issues = client.list_issues repo.address, state: 'open', per_page: 100
 
-    repo.update_attribute :open_issues_count, @open_issues.count
 
     @time_now = Time.now
     @open_issues_ages = @open_issues.map { |x| @time_now - x.created_at }
@@ -21,6 +20,7 @@ class AnalyzeOpenIssuesWorker
     repo.update_attribute :min_open_issue_age, @open_issues_ages.min
     repo.update_attribute :max_open_issue_age, @open_issues_ages.max
 
+    repo.update_attribute :open_issues_count, @open_issues.count
     FinalizeReportWorker.perform_async repo_id
   end
 end

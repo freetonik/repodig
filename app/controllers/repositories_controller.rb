@@ -10,11 +10,7 @@ class RepositoriesController < ApplicationController
     @repo = Repository.find_or_create_by(repository_params)
     @repo.save
 
-    if !@repo.analyzed
-      if (Time.now - @repo.updated_at) > 7.days
-        run_all_workers @repo.id
-      end
-    else
+    if !@repo.analyzed && !@repo.report_in_progress
       run_all_workers @repo.id
     end
 
@@ -22,9 +18,8 @@ class RepositoriesController < ApplicationController
   end
 
   def report
-    @repo = Repository.find(params[:id])
     if (Time.now - @repo.updated_at) > 24.hours
-      @repo.update_attribute(:report_in_progress, true)
+      @repo = Repository.find(params[:id])
       run_all_workers @repo.id
     end
     redirect_to @repo

@@ -10,13 +10,16 @@
         - if @repo.analyzed
           %small.text-muted
             = @repo.stargazers_count
-            %span.far.fa-star.text-muted.mr-3
+            %span.mr-3= image_tag("star.png", size: "19x20", alt: "fork")
 
             = @repo.forks_count
-            %span.fas.fa-code-branch.text-muted.mr-3
+            %span.mr-3= image_tag("fork.png", size: "14x20", alt: "fork")
 
             - if @repo.license
-              = link_to @repo.license, @repo.license_url, class: 'text-muted'
+              - if @repo.license == 'Other'
+                = link_to '(Other licence)', "https://github.com/#{@repo.address}", target: '_blank', class: 'r-unstyled-link'
+              - else
+                = link_to @repo.license, @repo.license_url, class: 'text-muted'
             - else
               (NO LICENCE)
     %p.mt-4= @repo.about
@@ -94,11 +97,11 @@
                 %br
                 %span.text-muted.font-weight-light (including PRs)
 
-            .d-flex.flex-column.mt-3
+            .mt-3
               .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
                 = distance_of_time_in_words(@repo.average_open_issue_age).gsub('about ','≈')
               .h4.mb-0
-                an issue stays open
+                an issue is open
                 %span.text-muted.font-weight-light
                   on average
                 %br
@@ -232,7 +235,7 @@
                 .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
                   = distance_of_time_in_words(@repo.average_open_prs_age).gsub('about ','≈')
                 .h4.mb-0
-                  a PR stays open
+                  a PR is open
                   %span.text-muted.font-weight-light
                     on average
                   %br
@@ -241,7 +244,7 @@
                       median is
                       = distance_of_time_in_words(@repo.median_open_prs_age)
 
-              .d-flex.flex-row.align-items-center.mt-5
+              .mt-5
                 %p.lead.mb-0
                   The oldest open PR was created
                   %span.font-weight-bold
@@ -290,7 +293,7 @@
                   - else
                     pull requests
 
-              .d-flex.flex-column.mt-3
+              .mt-3
                 .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
                   = distance_of_time_in_words(@repo.average_pr_closing_time).gsub('about ','≈')
                 .h4.mb-0

@@ -5,3 +5,13 @@
   .row.justify-content-center
     .col-12.col-lg-7.py-5
       = render "repositories/new"
+
+      .r-lead.text-center.mt-5.font-weight-bold
+        See examples:
+      %ul.list-unstyled.text-center.r-lead
+        %li= link_to 'Microsoft/vscode', 'repositories/7'
+        %li= link_to 'twbs/bootstrap', 'repositories/6'
+        %li= link_to 'facebook/react', 'repositories/2'
+        %li= link_to 'nodejs/node', 'repositories/8'
+        %li= link_to 'vuejs/vue', 'repositories/5'
+
