@@ -5,7 +5,6 @@ class AnalyzeBasicWorker
     repo = Repository.find repo_id
 
     client = Octokit::Client.new access_token: 'd6e541654ef87bf2174f7b98948b204ca57cb389'
-    client.auto_paginate = true
 
     ghrepo = client.repository repo.address
 

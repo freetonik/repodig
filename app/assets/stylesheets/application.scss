@@ -36,6 +36,12 @@ table.r-table {
   color: inherit;
 }
 
+.r-unhoverable-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
 .r-lead {
   font-size: 1.25rem;
 }

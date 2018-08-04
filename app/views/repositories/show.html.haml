@@ -22,7 +22,16 @@
                 = link_to @repo.license, @repo.license_url, class: 'text-muted'
             - else
               (NO LICENCE)
-    %p.mt-4= @repo.about
+    %p.mt-4
+      = @repo.about
+      %br
+      Repository created:
+      %span.font-weight-bold
+        = @repo.repo_created_at.strftime("%b %d, %Y")
+        = surround '(', ')' do
+          = distance_of_time_in_words(Time.now - @repo.repo_created_at)
+          ago
+
 
   - if !@repo.analyzed
     .alert.alert-warning
@@ -30,56 +39,68 @@
       Note that it may take
       %strong several minutes
       for large projects to be analyzed.
-  - else
-    .row
-      .col-12.col-lg-6.col-xl-4
-        %p
-          Created
-          %span.font-weight-bold= @repo.repo_created_at.strftime("%b %d, %Y")
-          = surround '(', ')' do
-            = distance_of_time_in_words(Time.now - @repo.repo_created_at)
-            ago
-          %br
-          Last updated
-          %span.font-weight-bold= @repo.repo_updated_at.strftime("%b %d, %Y")
-          = surround '(', ')' do
-            = distance_of_time_in_words(Time.now - @repo.repo_updated_at)
-            ago
-
-      .col-12.col-lg-6.col-xl-4
-        %p
-          %span.font-weight-bold Readme:
-          - if @repo.readme_lenght
-            YES
-            = link_to "(go to readme)", @repo.readme_url, target: '_blank'
-          - else
-            NO
-          %br
-          %span.font-weight-bold Wiki:
-          - if @repo.has_wiki
-            YES
-            = link_to "(go to wiki)", "https://github.com/#{@repo.address}/wiki", target: '_blank'
-          - else
-            NO
-
-      .col-12.col-lg-6.col-xl-4
-        %p
-          %span.font-weight-bold Contributors:
-          = @repo.contributors + @repo.contributors_incl_anon
-
-          %br
-          - if @repo.contributors != @repo.contributors_incl_anon
-            (including
-            = @repo.contributors_incl_anon - @repo.contributors
-            anonymous)
-          - else
-            (0 anonymous)
 
 - if @repo.analyzed
   .container-fluid.bg-light.px-0.mt-4
     .container
+      .row
+        .col-12.col-lg-4.my-4.d-flex.flex-column.justify-content-center
+          .h1.mb-0.pr-3.font-weight-bold
+            - if (@repo.repo_updated_at < Time.now-6.months)
+              %span.text-danger Stale
+              .h4.text-muted.font-weight-light
+                Updated 6+ months ago
+                = surround '(', ')' do
+                  = @repo.repo_updated_at.strftime("%m/%d/%Y")
+            - elsif @repo.repo_updated_at < Time.now-3.months
+              %span.text-warning On pause
+              .h4.text-muted.font-weight-light
+                Updated 3-6 months ago
+                = surround '(', ')' do
+                  = @repo.repo_updated_at.strftime("%m/%d/%Y")
+            - else
+              %span.text-success Active
+              .h4.text-muted.font-weight-light
+                Updated
+                = @repo.repo_updated_at.strftime("%b %d, %Y")
+
+        .col-12.col-lg-4.my-4.d-flex.flex-column.justify-content-center
+          .h2.pr-3.font-weight-bold
+            - if @repo.readme_lenght
+              = link_to @repo.readme_url, target: '_blank', class: 'text-success' do
+                ✓ Readme
+            - else
+              %span.text-warning No readme
+
+          .h2.mb-0.pr-3.font-weight-bold
+            - if @repo.has_wiki
+              = link_to "https://github.com/#{@repo.address}/wiki", target: '_blank', class: 'text-success' do
+                ✓ Wiki
+            - else
+              %span.text-warning No wiki
+
+        .col-12.col-lg-4.my-4
+          .d-flex.flex-row.align-items-center
+            = link_to "https://github.com/#{@repo.address}/graphs/contributors", target: '_blank', class: 'r-unstyled-link d-flex flex-row align-items-center r-unhoverable-link' do
+              .h1.display-2.mb-0.pr-3.font-weight-bold
+                = @repo.contributors + @repo.contributors_incl_anon
+              .h4.mb-0
+                - if @repo.contributors + @repo.contributors_incl_anon == 1
+                  contributor
+                - else
+                  contributors
+                %br
+                %span.text-muted.font-weight-light
+                  = surround '(', ')' do
+                    = @repo.contributors_incl_anon - @repo.contributors
+                    anonymous
+
+  -# =======================================
+
+  .container-fluid.bg-light.px-0.border-top
+    .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-5
+        .col-12.col-lg-6.my-4
           - if @repo.open_issues_count > 0
             .d-flex.flex-row.align-items-center
               .h1.display-2.mb-0.pr-3.font-weight-bold.text-warning
@@ -142,7 +163,7 @@
 
         .border-left
 
-        .col-12.col-lg-5.my-5
+        .col-12.col-lg-5.my-4
           - if @repo.closed_issues_count > 0
             .d-flex.flex-row.align-items-center
               .h1.display-2.mb-0.pr-3.font-weight-bold.text-success
@@ -211,7 +232,7 @@
   .container-fluid.bg-light.px-0.border-top
     .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-5
+        .col-12.col-lg-6.my-4
           - if @repo.open_pr_count.nil?
             Still analyzing open pull requests… try refreshing the page
           - else
@@ -273,7 +294,7 @@
 
         .border-left
 
-        .col-12.col-lg-5.my-5
+        .col-12.col-lg-5.my-4
           - if @repo.closed_pr_count.nil?
             Still analyzing closed pull requests… try refreshing the page
           - else
@@ -339,8 +360,37 @@
             - if @repo.report_in_progress
               A new report is being generated right how… Try refreshing the page.
             - elsif (Time.now - @repo.updated_at) > 24.hours
-              = link_to "Request fresh report", report_repository_path(@repo.id), class: 'btn btn-info mt-3', method: :post
+              = link_to "Request fresh report", report_repository_path(@repo.id), class: 'btn btn-dark mt-3', method: :post
             - else
               = succeed '.' do
                 New report can be requested in
                 = Time.at((24.hours - (Time.now - @repo.updated_at))).utc.strftime("%H hours %M minutes %S seconds")
+
+  .container.py-5
+    .row.justify-content-between
+      .col-12.col-md-8
+        .text-left
+          %h4 Interested in comprehensive reports?
+          %ul.r-lead
+            %li Deeper analysis of development status
+            %li Are there more popular forks?
+            %li CI/Tests/Coverage info
+            %li Batch reporting based on your package.json, Gemfile, etc.
+            %li Repeating email reports
+
+          %p.r-lead
+            I'd love to work on these
+            %strong
+              paid features
+            if there is demand.
+            Please, let me know if you're interested via
+            = link_to "repodig@rakhim.org", "mailto:repodig@rakhim.org"
+            or
+            = succeed '.' do
+              = link_to "twitter", "https://twitter.com/freetonik"
+
+      .col-12.col-md-3.text-right.d-flex.flex-column.justify-content-end
+        .pb-4
+          Consider donating to keep this free service running
+          = link_to "https://www.paypal.me/rakhimd" do
+            = image_tag("paypal.png", size: "166x95", alt: "paypal")
