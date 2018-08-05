@@ -25,7 +25,7 @@
     %p.mt-4
       = @repo.about
       %br
-      Repository created:
+      Created:
       %span.font-weight-bold
         = @repo.repo_created_at.strftime("%b %d, %Y")
         = surround '(', ')' do
@@ -44,8 +44,8 @@
   .container-fluid.bg-light.px-0.mt-4
     .container
       .row
-        .col-12.col-lg-4.my-4.d-flex.flex-column.justify-content-center
-          .h1.mb-0.pr-3.font-weight-bold
+        .col-12.col-md-4.my-4.d-flex.flex-column.justify-content-center
+          .h2.mb-0.pr-3.font-weight-bold
             - if (@repo.repo_updated_at < Time.now-6.months)
               %span.text-danger Stale
               .h4.text-muted.font-weight-light
@@ -53,7 +53,7 @@
                 = surround '(', ')' do
                   = @repo.repo_updated_at.strftime("%m/%d/%Y")
             - elsif @repo.repo_updated_at < Time.now-3.months
-              %span.text-warning On pause
+              %span.text-warning On pause..?
               .h4.text-muted.font-weight-light
                 Updated 3-6 months ago
                 = surround '(', ')' do
@@ -64,25 +64,10 @@
                 Updated
                 = @repo.repo_updated_at.strftime("%b %d, %Y")
 
-        .col-12.col-lg-4.my-4.d-flex.flex-column.justify-content-center
-          .h2.pr-3.font-weight-bold
-            - if @repo.readme_lenght
-              = link_to @repo.readme_url, target: '_blank', class: 'text-success' do
-                ✓ Readme
-            - else
-              %span.text-warning No readme
-
-          .h2.mb-0.pr-3.font-weight-bold
-            - if @repo.has_wiki
-              = link_to "https://github.com/#{@repo.address}/wiki", target: '_blank', class: 'text-success' do
-                ✓ Wiki
-            - else
-              %span.text-warning No wiki
-
-        .col-12.col-lg-4.my-4
+        .col-12.col-md-5.my-4
           .d-flex.flex-row.align-items-center
             = link_to "https://github.com/#{@repo.address}/graphs/contributors", target: '_blank', class: 'r-unstyled-link d-flex flex-row align-items-center r-unhoverable-link' do
-              .h1.display-2.mb-0.pr-3.font-weight-bold
+              .h1.display-4.mb-0.pr-3.font-weight-bold
                 = @repo.contributors + @repo.contributors_incl_anon
               .h4.mb-0
                 - if @repo.contributors + @repo.contributors_incl_anon == 1
@@ -95,15 +80,32 @@
                     = @repo.contributors_incl_anon - @repo.contributors
                     anonymous
 
+        .col-12.col-md-3.my-4.d-flex.flex-column.justify-content-center.align-items-md-end
+          .h3.pr-3.font-weight-bold
+            - if @repo.readme_lenght
+              = link_to @repo.readme_url, target: '_blank', class: 'text-success' do
+                ✓ Readme
+            - else
+              %span.text-warning No readme
+
+          .h3.mb-0.pr-3.font-weight-bold
+            - if @repo.has_wiki
+              = link_to "https://github.com/#{@repo.address}/wiki", target: '_blank', class: 'text-success' do
+                ✓ Wiki
+            - else
+              %span.text-warning No wiki
+
+
+
   -# =======================================
 
   .container-fluid.bg-light.px-0.border-top
     .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-4
+        .col-12.col-lg-6.my-5
           - if @repo.open_issues_count > 0
             .d-flex.flex-row.align-items-center
-              .h1.display-2.mb-0.pr-3.font-weight-bold.text-warning
+              .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
                 - if @repo.open_issues_count == 100
                   = succeed '+' do
                     = @repo.open_issues_count
@@ -119,12 +121,10 @@
                 %span.text-muted.font-weight-light (including PRs)
 
             .mt-3
-              .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
-                = distance_of_time_in_words(@repo.average_open_issue_age).gsub('about ','≈')
+              .h1.mb-0.pr-3.font-weight-bold.text-warning
+                = distance_of_time_in_words(@repo.average_open_issue_age).gsub('about ','')
               .h4.mb-0
-                an issue is open
-                %span.text-muted.font-weight-light
-                  on average
+                average open issue age
                 %br
                 %span.text-muted.font-weight-light
                   = surround '(', ')' do
@@ -134,17 +134,14 @@
 
             .mt-5
               %p.lead.mb-0
-                Oldest open issue created
+                Oldest open issue
                 %span.font-weight-bold
                   = distance_of_time_in_words(@repo.max_open_issue_age)
-                  ago
                 %br
 
-                Newest open issue created
+                Newest open issue
                 %span.font-weight-bold
                   = distance_of_time_in_words(@repo.min_open_issue_age)
-                  ago
-
 
               - if @repo.open_issues_count == 100
                 %br
@@ -153,7 +150,7 @@
 
           - else
             .d-flex.flex-row.align-items-center.text-muted
-              .h1.display-2.mb-0.pr-3.font-weight-bold
+              .h1.display-4.mb-0.pr-3.font-weight-bold
                 NO
               .h4.mb-0
                 open
@@ -163,10 +160,10 @@
 
         .border-left
 
-        .col-12.col-lg-5.my-4
+        .col-12.col-lg-5.my-5
           - if @repo.closed_issues_count > 0
             .d-flex.flex-row.align-items-center
-              .h1.display-2.mb-0.pr-3.font-weight-bold.text-success
+              .h1.display-4.mb-0.pr-3.font-weight-bold.text-success
                 - if @repo.closed_issues_count == 100
                   = succeed '+' do
                     = @repo.closed_issues_count
@@ -182,12 +179,10 @@
                 %span.text-muted.font-weight-light (including PRs)
 
             .d-flex.flex-column.mt-3
-              .h1.display-4.mb-0.pr-3.font-weight-bold.text-success
-                = distance_of_time_in_words(@repo.average_issue_closing_time).gsub('about ','≈')
+              .h1.mb-0.pr-3.font-weight-bold.text-success
+                = distance_of_time_in_words(@repo.average_issue_closing_time).gsub('about ','')
               .h4.mb-0
-                to close an issue
-                %span.text-muted.font-weight-light
-                  on average
+                average closing period
                 %br
                 %span.text-muted.font-weight-light
                   = surround '(', ')' do
@@ -202,7 +197,6 @@
                 Shortest closing time
                 %span.font-weight-bold= distance_of_time_in_words(@repo.min_issue_closing_time)
               %p.lead.mb-0
-                On average
                 %span.font-weight-bold
                   = @repo.average_number_of_comments_per_issue
                   - if @repo.average_number_of_comments_per_issue == 1
@@ -210,9 +204,9 @@
                   - else
                     comments
                   per issue
-                %br
+                on average
                 = surround '(', ')' do
-                  max is
+                  max
                   = @repo.max_number_of_comments_per_issue
 
               - if @repo.closed_issues_count == 100
@@ -222,7 +216,7 @@
 
           - else
             .d-flex.flex-row.align-items-center.text-muted
-              .h1.display-2.mb-0.pr-3.font-weight-bold
+              .h1.display-4.mb-0.pr-3.font-weight-bold
                 NO
               .h4.mb-0
                 closed issues
@@ -232,13 +226,13 @@
   .container-fluid.bg-light.px-0.border-top
     .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-4
+        .col-12.col-lg-6.my-5
           - if @repo.open_pr_count.nil?
             Still analyzing open pull requests… try refreshing the page
           - else
             - if @repo.open_pr_count > 0
               .d-flex.flex-row.align-items-center
-                .h1.display-2.mb-0.pr-3.font-weight-bold.text-warning
+                .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
                   - if @repo.open_pr_count == 100
                     = succeed '+' do
                       = @repo.open_pr_count
@@ -253,30 +247,26 @@
                     requests
 
               .d-flex.flex-column.mt-3
-                .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
+                .h1.mb-0.pr-3.font-weight-bold.text-warning
                   = distance_of_time_in_words(@repo.average_open_prs_age).gsub('about ','≈')
                 .h4.mb-0
-                  a PR is open
-                  %span.text-muted.font-weight-light
-                    on average
+                  average open PR age
                   %br
                   %span.text-muted.font-weight-light
                     = surround '(', ')' do
-                      median is
+                      median
                       = distance_of_time_in_words(@repo.median_open_prs_age)
 
               .mt-5
                 %p.lead.mb-0
-                  The oldest open PR was created
+                  Oldest open PR
                   %span.font-weight-bold
                     = distance_of_time_in_words(@repo.max_open_prs_age)
-                    ago
                   %br
 
-                  The newest open PR was created
+                  Newest open PR
                   %span.font-weight-bold
                     = distance_of_time_in_words(@repo.min_open_prs_age)
-                    ago
 
                 - if @repo.open_pr_count == 100
                   %br
@@ -285,7 +275,7 @@
 
             - else
               .d-flex.flex-row.align-items-center.text-muted
-                .h1.display-2.mb-0.pr-3.font-weight-bold
+                .h1.display-4.mb-0.pr-3.font-weight-bold
                   NO
                 .h4.mb-0
                   open PRs
@@ -294,61 +284,56 @@
 
         .border-left
 
-        .col-12.col-lg-5.my-4
-          - if @repo.closed_pr_count.nil?
-            Still analyzing closed pull requests… try refreshing the page
-          - else
-            - if @repo.closed_pr_count > 0
-              .d-flex.flex-row.align-items-center
-                .h1.display-2.mb-0.pr-3.font-weight-bold.text-success
-                  - if @repo.closed_pr_count == 100
-                    = succeed '+' do
-                      = @repo.closed_pr_count
-                  - else
-                    = @repo.closed_pr_count
-                .h4.mb-0
-                  closed
-                  %br
-                  - if @repo.closed_pr_count == 1
-                    pull request
-                  - else
-                    pull requests
-
-              .mt-3
-                .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
-                  = distance_of_time_in_words(@repo.average_pr_closing_time).gsub('about ','≈')
-                .h4.mb-0
-                  to merge a PR
-                  %span.text-muted.font-weight-light
-                    on average
-                  %br
-                  %span.text-muted.font-weight-light
-                    = surround '(', ')' do
-                      median is
-                      = distance_of_time_in_words(@repo.median_pr_closing_time)
-
-              .mt-5
-                %p.lead.mb-0
-                  The longest merge time is
-                  %span.font-weight-bold= distance_of_time_in_words(@repo.max_pr_closing_time)
-                  %br
-
-                  And the shortest is
-                  %span.font-weight-bold= distance_of_time_in_words(@repo.min_pr_closing_time)
-
+        .col-12.col-lg-5.my-5
+          - if @repo.closed_pr_count > 0
+            .d-flex.flex-row.align-items-center
+              .h1.display-4.mb-0.pr-3.font-weight-bold.text-success
                 - if @repo.closed_pr_count == 100
-                  %br
-                  %p.lead
-                    (based on the last 100 closed PRs)
-            - else
-              .d-flex.flex-row.align-items-center.text-muted
-                .h1.display-2.mb-0.pr-3.font-weight-bold
-                  NO
-                .h4.mb-0
-                  closed PRs
-                  %br
-                  %span.font-weight-light
-                    right now
+                  = succeed '+' do
+                    = @repo.closed_pr_count
+                - else
+                  = @repo.closed_pr_count
+              .h4.mb-0
+                closed
+                %br
+                - if @repo.closed_pr_count == 1
+                  pull request
+                - else
+                  pull requests
+
+            .mt-3
+              .h1.mb-0.pr-3.font-weight-bold.text-warning
+                = distance_of_time_in_words(@repo.average_pr_closing_time).gsub('about ','≈')
+              .h4.mb-0
+                average merging time
+                %br
+                %span.text-muted.font-weight-light
+                  = surround '(', ')' do
+                    median
+                    = distance_of_time_in_words(@repo.median_pr_closing_time)
+
+            .mt-5
+              %p.lead.mb-0
+                Longest merge
+                %span.font-weight-bold= distance_of_time_in_words(@repo.max_pr_closing_time)
+                %br
+
+                Shortest merge
+                %span.font-weight-bold= distance_of_time_in_words(@repo.min_pr_closing_time)
+
+              - if @repo.closed_pr_count == 100
+                %br
+                %p.lead
+                  (based on the last 100 closed PRs)
+          - else
+            .d-flex.flex-row.align-items-center.text-muted
+              .h1.display-4.mb-0.pr-3.font-weight-bold
+                NO
+              .h4.mb-0
+                closed PRs
+                %br
+                %span.font-weight-light
+                  right now
 
       .row.mt-5
         .col.text-center.text-muted.py-5
@@ -367,30 +352,48 @@
                 = Time.at((24.hours - (Time.now - @repo.updated_at))).utc.strftime("%H hours %M minutes %S seconds")
 
   .container.py-5
-    .row.justify-content-between
-      .col-12.col-md-8
-        .text-left
-          %h4 Interested in comprehensive reports?
-          %ul.r-lead
-            %li Deeper analysis of development status
-            %li Are there more popular forks?
-            %li CI/Tests/Coverage info
-            %li Batch reporting based on your package.json, Gemfile, etc.
-            %li Repeating email reports
+    .row
+      .col-12.col-xl-7
+        %h4 Interested in comprehensive reports?
+        %ul.r-lead
+          %li Deeper analysis of development status
+          %li Are there more popular forks?
+          %li CI/Tests/Coverage info
+          %li Batch reporting based on your package.json, Gemfile, etc.
+          %li Periodic email reports
 
-          %p.r-lead
-            I'd love to work on these
-            %strong
-              paid features
-            if there is demand.
-            Please, let me know if you're interested via
-            = link_to "repodig@rakhim.org", "mailto:repodig@rakhim.org"
-            or
-            = succeed '.' do
-              = link_to "twitter", "https://twitter.com/freetonik"
+        %p.r-lead
+          I'd love to work on these
+          %strong
+            paid features.
+          If you're interested, subscribe to Repodig newsletter:
 
-      .col-12.col-md-3.text-right.d-flex.flex-column.justify-content-end
-        .pb-4
-          Consider donating to keep this free service running
-          = link_to "https://www.paypal.me/rakhimd" do
-            = image_tag("paypal.png", size: "166x95", alt: "paypal")
+        %link{:href => "//cdn-images.mailchimp.com/embedcode/slim-10_7.css", :rel => "stylesheet", :type => "text/css"}/
+        :css
+          #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; }
+          /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+             We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+        #mc_embed_signup
+          %form#mc-embedded-subscribe-form.validate.p-0{:action => "https://repodig.us1.list-manage.com/subscribe/post?u=de62eaf6c9d4231f028f54b69&id=5b75059a08", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
+            #mc_embed_signup_scroll
+              %input#mce-EMAIL.email{:name => "EMAIL", :placeholder => "email address", :required => "", :type => "email", :value => ""}/
+              / real people should not fill this in and expect good things - do not remove this or risk form bot signups
+              %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
+                %input{:name => "b_de62eaf6c9d4231f028f54b69_5b75059a08", :tabindex => "-1", :type => "text", :value => ""}/
+              .clear
+                %input#mc-embedded-subscribe.button{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
+        / End mc_embed_signup
+
+
+        %p.r-lead.mt-5
+          Contact me via
+          = link_to "repodig@rakhim.org", "mailto:repodig@rakhim.org"
+          or
+          = succeed '.' do
+            = link_to "twitter", "https://twitter.com/freetonik"
+
+      -# .col-12.col-md-3.text-right.d-flex.flex-column.justify-content-end
+      -#   .pb-4
+      -#     Consider donating to keep this free service running
+      -#     = link_to "https://www.paypal.me/rakhimd" do
+      -#       = image_tag("paypal.png", size: "166x95", alt: "paypal")
