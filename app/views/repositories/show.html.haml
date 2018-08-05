@@ -22,16 +22,16 @@
                 = link_to @repo.license, @repo.license_url, class: 'text-muted'
             - else
               (NO LICENCE)
-    %p.mt-4
-      = @repo.about
-      %br
-      Created:
-      %span.font-weight-bold
-        = @repo.repo_created_at.strftime("%b %d, %Y")
-        = surround '(', ')' do
-          = distance_of_time_in_words(Time.now - @repo.repo_created_at)
-          ago
-
+    - if @repo.analyzed
+      %p.mt-4
+        = @repo.about
+        %br
+        Created:
+        %span.font-weight-bold
+          = @repo.repo_created_at.strftime("%b %d, %Y")
+          = surround '(', ')' do
+            = distance_of_time_in_words(Time.now - @repo.repo_created_at)
+            ago
 
   - if !@repo.analyzed
     .alert.alert-warning
@@ -80,29 +80,27 @@
                     = @repo.contributors_incl_anon - @repo.contributors
                     anonymous
 
-        .col-12.col-md-3.my-4.d-flex.flex-column.justify-content-center.align-items-md-end
-          .h3.pr-3.font-weight-bold
+        .col-12.col-md-3.my-4.d-flex.flex-column.justify-content-center
+          .h4.pr-3.font-weight-bold
             - if @repo.readme_lenght
               = link_to @repo.readme_url, target: '_blank', class: 'text-success' do
                 ✓ Readme
             - else
               %span.text-warning No readme
 
-          .h3.mb-0.pr-3.font-weight-bold
+          .h4.mb-0.pr-3.font-weight-bold
             - if @repo.has_wiki
               = link_to "https://github.com/#{@repo.address}/wiki", target: '_blank', class: 'text-success' do
                 ✓ Wiki
             - else
               %span.text-warning No wiki
 
-
-
   -# =======================================
 
   .container-fluid.bg-light.px-0.border-top
     .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-5
+        .col-12.col-md-6.my-5
           - if @repo.open_issues_count > 0
             .d-flex.flex-row.align-items-center
               .h1.display-4.mb-0.pr-3.font-weight-bold.text-warning
@@ -125,7 +123,6 @@
                 = distance_of_time_in_words(@repo.average_open_issue_age).gsub('about ','')
               .h4.mb-0
                 average open issue age
-                %br
                 %span.text-muted.font-weight-light
                   = surround '(', ')' do
                     median
@@ -158,9 +155,9 @@
                 %br
                 %span.text-muted.font-weight-light (including PRs)
 
-        .border-left
 
-        .col-12.col-lg-5.my-5
+
+        .col-12.col-md-6.my-5
           - if @repo.closed_issues_count > 0
             .d-flex.flex-row.align-items-center
               .h1.display-4.mb-0.pr-3.font-weight-bold.text-success
@@ -183,7 +180,6 @@
                 = distance_of_time_in_words(@repo.average_issue_closing_time).gsub('about ','')
               .h4.mb-0
                 average closing period
-                %br
                 %span.text-muted.font-weight-light
                   = surround '(', ')' do
                     median
@@ -226,7 +222,7 @@
   .container-fluid.bg-light.px-0.border-top
     .container
       .row.justify-content-between
-        .col-12.col-lg-6.my-5
+        .col-12.col-md-6.my-5
           - if @repo.open_pr_count.nil?
             Still analyzing open pull requests… try refreshing the page
           - else
@@ -251,7 +247,6 @@
                   = distance_of_time_in_words(@repo.average_open_prs_age).gsub('about ','≈')
                 .h4.mb-0
                   average open PR age
-                  %br
                   %span.text-muted.font-weight-light
                     = surround '(', ')' do
                       median
@@ -282,9 +277,9 @@
                   %br
                   %span.text-muted.font-weight-light right now
 
-        .border-left
 
-        .col-12.col-lg-5.my-5
+
+        .col-12.col-md-6.my-5
           - if @repo.closed_pr_count > 0
             .d-flex.flex-row.align-items-center
               .h1.display-4.mb-0.pr-3.font-weight-bold.text-success
@@ -306,7 +301,6 @@
                 = distance_of_time_in_words(@repo.average_pr_closing_time).gsub('about ','≈')
               .h4.mb-0
                 average merging time
-                %br
                 %span.text-muted.font-weight-light
                   = surround '(', ')' do
                     median

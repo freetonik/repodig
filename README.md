@@ -22,3 +22,5 @@ Go to http://rails.test
 ```
 nanobox deploy
 ```
+
+Stop!
