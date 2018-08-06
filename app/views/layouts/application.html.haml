@@ -17,9 +17,7 @@
 
       = succeed ',' do
         = link_to 'Rakhim D.', 'https://rakhim.org'
+        = surround '(', ')' do
+          = link_to '@freetonik', 'https://twitter.com/freetonik'
       2018
-      .mt-2
-        %a.twitter-follow-button{"data-show-count" => "false", :href => "https://twitter.com/freetonik?ref_src=twsrc%5Etfw"} Follow @freetonik
-        %script{:async => "", :charset => "utf-8", :src => "https://platform.twitter.com/widgets.js"}
-
-      .h2 🇫🇮
+      .h2.mt-3 🇫🇮
