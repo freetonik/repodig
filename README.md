@@ -19,8 +19,9 @@ Go to http://rails.test
 
 ## Deploy
 
+Deployment is very fun!
+
 ```
-nanobox deploy
 ```
 
 Stop!
