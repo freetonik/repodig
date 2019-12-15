@@ -4,7 +4,7 @@ class AnalyzeClosedIssuesWorker
   def perform(repo_id)
     repo = Repository.find repo_id
 
-    client = Octokit::Client.new access_token: 'd6e541654ef87bf2174f7b98948b204ca57cb389'
+    client = Octokit::Client.new access_token: '8efaaa3ac27d4abdda30d0bbe0ee3f4e4478a7a8'
 
     # CLOSED ISSUES
     @closed_issues = client.list_issues repo.address, state: 'closed', per_page: 100
